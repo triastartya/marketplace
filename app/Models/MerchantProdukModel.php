@@ -9,6 +9,7 @@ class MerchantProdukModel extends Model
 {
     use HasFactory;
     protected $table = 'merchant_produk';
+    protected $primaryKey = 'merchant_produk_id';
     protected $fillable = [
         'produk_id','merchant_id','uuid', 'nama_produk', 'keterangan', 'harga', 'diskon', 'harga_jual', 'stok', 'kategori_id', 'rating', 'terjual', 'delete'
     ];

@@ -69,7 +69,16 @@ class MerchantController extends Controller
     
     public function tambah_produk(Request $request){
         $data = [
-            'kategori' => KategoriModel::all()
+            'kategori' => KategoriModel::all(),
+            'produk' => null
+        ];
+        return view('website/produk_tambah',$data);
+    }
+    
+    public function edit_produk(Request $request){
+        $data = [
+            'kategori' => KategoriModel::all(),
+            'produk' => MerchantProdukModel::with('merchant_produk_gambar')->where('uuid',$request->uuid)->first()
         ];
         return view('website/produk_tambah',$data);
     }
@@ -98,6 +107,35 @@ class MerchantController extends Controller
                 'path' => $upload_image_name
             ]);
             return response()->json(['status'=>true,'data'=>$data]);
+        }catch(\Exception $ex){
+            return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
+        }
+    }
+    
+    public function update_produk(Request $request){
+        try{
+            $update = MerchantProdukModel::where('uuid',$request->uuid)->first();
+            
+            if($request->file('file')){
+                $upload_image = $request->file('file');
+                $upload_image_name = rand().'-produk.'.$upload_image->getClientOriginalExtension();
+                $upload_image->move(public_path('images/produk/'), $upload_image_name);
+                $delete = MerchantProdukGambarModel::where('merchant_produk_id',$update->merchant_produk_id)->delete();
+                $gambar = MerchantProdukGambarModel::create([
+                    'merchant_produk_id' => $update->merchant_produk_id,
+                    'path' => $upload_image_name
+                ]);
+            }
+            
+            $update->nama_produk = $request->nama_produk;
+            $update->kategori_id = $request->kategori_id;
+            $update->harga = $request->harga;
+            $update->harga_jual = $request->harga;
+            $update->stok = $request->stok;
+            $update->keterangan = $request->keterangan;
+            $update->save();
+            
+            return response()->json(['status'=>true,'data'=>$update]);
         }catch(\Exception $ex){
             return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
         }

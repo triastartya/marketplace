@@ -97,7 +97,12 @@
                             <p class="fs-nama-produk"><% x.nama_produk %></p>
                             <p class="fs-harga-produk">Rp <% x.harga_jual | currency:"" %></p>
                             <div class="d-flex flex-row "> <i class="fas fa-star text-warning me-1"></i><p class="fs-info mb-1"><% x.rating %> | <% x.terjual %> terjual</p> </div>
-                            <div><button class="btn btn-primary btn-sm me-2">edit</button><button class="btn btn-danger btn-sm">hapus</button></div>
+                            <div>
+                              <a href="{{ url('edit_produk') }}/<% x.uuid %>">
+                                <button class="btn btn-primary btn-sm me-2">edit</button>
+                              </a>
+                              <button class="btn btn-danger btn-sm">hapus</button>
+                            </div>
                           </div>
                         </div>
                       </div>

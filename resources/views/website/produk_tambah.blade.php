@@ -81,7 +81,7 @@
                 <div class="form-group mb-2 row">
                   <label for="nama_produk" class="col-sm-3 col-form-label">nama produk</label>
                   <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nama_produk" name="nama_produk">
+                      <input type="text" class="form-control" @isset($produk) value="{{$produk->nama_produk}}" @endisset id="nama_produk" name="nama_produk">
                   </div>
                 </div>
                 <div class="form-group mb-2 row">
@@ -90,7 +90,7 @@
                         <select class="form-select" aria-label="Default select example" id="kategori_id" name="kategori_id">
                             <option value=""> </option>
                             @foreach($kategori as $item)
-                                <option value="{{$item->kategori_id}}">{{ $item->kategori }}</option>
+                                <option value="{{$item->kategori_id}}" @if($produk->kategori_id==$item->kategori_id) selected @endif>{{ $item->kategori }}</option>
                             @endforeach
                         </select>
                   </div>
@@ -98,13 +98,13 @@
                 <div class="form-group mb-2 row">
                     <label for="harga" class="col-sm-3 col-form-label">harga</label>
                     <div class="col-sm-9">
-                        <input type="number" class="form-control form-control-sm" id="harga" name="harga">
+                        <input type="number" class="form-control form-control-sm" @isset($produk) value="{{$produk->harga}}" @endisset id="harga" name="harga">
                     </div>
                 </div>
                 <div class="form-group mb-2 row">
                     <label for="harga" class="col-sm-3 col-form-label">stok</label>
                     <div class="col-sm-9">
-                        <input type="number" class="form-control form-control-sm" id="stok" name="stok">
+                        <input type="number" class="form-control form-control-sm" @isset($produk) value="{{$produk->stok}}" @endisset id="stok" name="stok">
                     </div>
                 </div>
                 <div class=" form-group mb-3 row">
@@ -132,7 +132,7 @@
                 <div class="form-group mb-3 row">
                     <label class="col-sm-3 col-form-label">Diskripsi</label>
                     <div class="col-sm-9">
-                        <textarea id="description" id="description" name="description"></textarea>
+                        <textarea id="description" id="description" name="description">@isset($produk) {{$produk->keterangan}} @endisset</textarea>
                     </div>
                 </div>
                 <button class="btn btn-primary" type="submit">Simpan</button>
@@ -217,6 +217,21 @@ app.controller("myCtrl", function($scope,$http) {
         $('#description').summernote({
             height:200
         })
+        
+        @isset($produk)
+            image = "{{ $produk->merchant_produk_gambar[0]->src }}"
+            $('.box-body-banner').empty();
+            $('.box-body-banner').append('<img height="300" src='+image+' />');
+            $('.preview-zone-banner').removeClass('hidden');
+            $('.tdropzone-wrapper-banner').addClass('hidden');
+            $scope.posturl = "{{ url('edit_produk') }}";     
+        @else
+            $('.box-body-banner').empty();
+            $('.preview-zone-banner').addClass('hidden');
+            $('.tdropzone-wrapper-banner').removeClass('hidden');
+            $scope.posturl = "{{ url('tambah_produk') }}";  
+        @endisset
+            
     });
     
     var validator = $("#form_produk").validate({
@@ -252,12 +267,15 @@ app.controller("myCtrl", function($scope,$http) {
             form = $("#form_produk")[0];
 			let formData = new FormData(form);
 			formData.append('keterangan',description);
+			@isset($produk)
+			    formData.append('uuid',"{{$produk->uuid}}");
+			@endisset
 				
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-				url: "{{ url('tambah_produk') }}",
+				url: $scope.posturl,
 				type: "POST",
                 data: formData,
 				mimeType: "multipart/form-data",
@@ -269,7 +287,7 @@ app.controller("myCtrl", function($scope,$http) {
                 {
                     if(data.status){
                         Swal.fire({icon: 'success',title: 'Data Berhasil Di Simpan',text: '',}).then(function(){
-                           
+                            window.location.reload();
                         })
                     }else{
                         Swal.fire({icon: 'error',title: 'Oops...',text: data.message,})

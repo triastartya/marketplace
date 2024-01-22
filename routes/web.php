@@ -92,7 +92,9 @@ Route::get('order_produk_toko',[MerchantController::class,'get_order_produk_toko
 Route::get('delete_produk/{uuid}',[MerchantController::class,'delete_produk']);
 
 Route::get('tambah_produk',[MerchantController::class,'tambah_produk']);
+Route::get('edit_produk/{uuid}',[MerchantController::class,'edit_produk']);
 Route::post('tambah_produk',[MerchantController::class,'create_produk']);
+Route::post('edit_produk',[MerchantController::class,'update_produk']);
 Route::post('di_kirim',[MerchantController::class,'kirim_barang']);
 Route::post('di_terima',[MerchantController::class,'di_terima']);
 
