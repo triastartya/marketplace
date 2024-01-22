@@ -5,8 +5,15 @@
 @endsection
 
 @section('content')
-    <div class="container">     
-        <h5 class="card-title fw-bold mt-3 mb-3"> <i class="fa-solid fa-shop text-primary"></i> Toko</h5>
+    <div class="container">                  
+        <div class="d-flex justify-content-between mt-4 mb-2">
+          <h5 class="card-title fw-bold "> 
+            <i class="fa-solid fa-shop text-primary mx-2"></i> Toko
+          </h5>
+          <a href="{{ url('logout_merchant')}}">
+            <button class="btn btn-outline-danger btn-sm mx-1">Logout</button>
+          </a>
+        </div>
         <div class="row">
           <div class="col-md-4">
             <div class="shadow card p-3 d-flex flex-row text-danger">

@@ -5,8 +5,15 @@
 @endsection
 
 @section('content')
-    <div class="container">   
-        <h5 class="card-title fw-bold mt-3"> <i class="fa-solid fa-user text-primary mx-2"></i> Member</h5>
+    <div class="container"> 
+        <div class="d-flex justify-content-between mt-4 mb-2">
+          <h5 class="card-title fw-bold"> 
+            <i class="fa-solid fa-user text-primary mx-2"></i> Member
+          </h5>
+          <a href="{{ url('logout_member')}}">
+            <button class="btn btn-outline-danger btn-sm mx-1">Logout</button>
+          </a>
+        </div>
         <div class="row ">
           <div class="col-lg-12">
             <nav class="mt-3">

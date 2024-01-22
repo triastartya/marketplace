@@ -190,4 +190,9 @@ class MemberController extends Controller
         }
     }
     
+    public function logout(Request $request){
+        $request->session()->forget('data_member');
+        return redirect('/');
+    }
+    
 }

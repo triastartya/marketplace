@@ -49,7 +49,7 @@
             </a>
           </div>
           
-          <div style="width:calc(100vw - 420px)">
+          <div style="width:calc(100vw - 500px)">
             <div class="input-group input-group-sm">
               <span class="input-group-text" id="basic-addon1">
                 <i class="fa-solid fa-search mx-1"></i>
@@ -58,10 +58,22 @@
             </div>
           </div>
           
-          <div style="width:190px">
+          <div style="width:250px">
             <a href="{{ url('keranjang-belanja') }}"><i class="fa-solid fa-cart-shopping text-primary mx-2"></i></a>
-            <button class="btn btn-outline-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Masuk</button>
-            <button class="btn btn-primary btn-outline btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#register">Daftar</button>
+            @if(session()->has('data_member'))
+              <a href="{{ url('member') }}">
+                <button class="btn btn-outline-primary btn-sm mx-1">Akun</button>
+              </a>
+            @else
+              <button class="btn btn-outline-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Masuk</button>
+              <button class="btn btn-primary btn-outline btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#register">Daftar</button>
+            @endif
+            
+            @if(session()->has('data_merchant'))
+              <a href="{{ url('toko') }}">
+                <button class="btn btn-outline-primary btn-sm mx-1">Toko</button>
+              </a>
+            @endif
           </div>
       </div>
     </header>

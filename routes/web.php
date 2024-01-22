@@ -110,3 +110,5 @@ Route::get('pengajuan',[AdministratorController::class,'pengajuan_pencairan_dana
 Route::post('pencairan',[AdministratorController::class,'pencairan']);
 Route::get('history_pembayaran',[AdministratorController::class,'history_pembayaran']);
 
+Route::get('logout_member',[MemberController::class,'logout']);
+Route::get('logout_merchant',[MerchantController::class,'logout']);

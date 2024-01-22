@@ -170,4 +170,9 @@ class MerchantController extends Controller
             return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
         }
     }
+    
+    public function logout(Request $request){
+        $request->session()->forget('data_merchant');
+        return redirect('/');
+    }
 }
