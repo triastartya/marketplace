@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('member_alamat', function (Blueprint $table) {
             $table->id('member_alamat_id');
-            $table->string('uuid');
-            $table->string('nama');
-            $table->string('no_hp');
-            $table->string('alamat');
-            $table->string('detail');
-            $table->string('provinsi');
-            $table->string('kota');
-            $table->string('kelurahan');
-            $table->string('kodepos');
+            $table->integer('member_id');
+            $table->string('uuid',100);
+            $table->string('nama',30);
+            $table->string('no_hp',30);
+            $table->string('alamat',100);
+            $table->string('detail',200);
+            $table->string('provinsi',20);
+            $table->string('kota',20);
+            $table->string('kelurahan',20);
+            $table->string('kodepos',10);
             $table->timestamps();
         });
     }

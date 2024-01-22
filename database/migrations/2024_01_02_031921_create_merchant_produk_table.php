@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('merchant_produk', function (Blueprint $table) {
             $table->id('merchant_produk_id');
-            $table->string('uuid');
-            $table->string('nama_produk');
+            $table->integer('merchant_id');
+            $table->string('uuid',100);
+            $table->string('nama_produk',100);
             $table->text('keterangan');
-            $table->double('harga');
-            $table->integer('diskon');
-            $table->double('harga_jual');
+            $table->integer('harga');
+            $table->double('diskon');
+            $table->integer('harga_jual');
             $table->integer('stok');
             $table->integer('kategori_id');
-            $table->integer('rating');
+            $table->double('rating');
             $table->integer('terjual');
             $table->timestamps();
         });

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Administrator</title>
 
@@ -114,117 +116,51 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-           with font-awesome or any other icon font library -->
-          {{-- <li class="nav-item">
-            <a href="{{ url('/') }}/user" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                User
-              </p>
-            </a>
-          </li> <i class="fas fa-id-badge"></i> --}}
           <li class="nav-item">
-            <a href="{{ url('/') }}/pengguna" class="nav-link">
-              <i class="nav-icon fas fa-id-badge"></i>
+            <a href="{{ url('/') }}/administrator/konfirmasi" class="nav-link">
+              <i class="nav-icon fas fa-caret-right"></i>
               <p>
-                Pengguna Aplikasi
-                {{-- <span class="right badge badge-danger">New</span> --}}
+                Konfirmasi Pembayaran
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/') }}/child" class="nav-link">
-              <i class="nav-icon fas fa-child"></i>
+            <a href="{{ url('/') }}/administrator/pencairan" class="nav-link">
+              <i class="nav-icon fas fa-caret-right"></i>
               <p>
-                Remaja
-                {{-- <span class="right badge badge-danger">New</span> --}}
+                Pembayaran Ke Toko
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/') }}/guru" class="nav-link">
-              <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <a href="{{ url('/') }}/administrator/kategori" class="nav-link">
+              <i class="nav-icon fas fa-caret-right"></i>
               <p>
-                Guru
-                {{-- <span class="right badge badge-danger">New</span> --}}
+                Kategori
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/') }}/z_score" class="nav-link">
-              <i class="nav-icon fas fa-heart"></i>
+            <a href="{{ url('/') }}/administrator/page" class="nav-link">
+              <i class="nav-icon fas fa-caret-right"></i>
               <p>
-                Status Gizi
-                {{-- <span class="right badge badge-danger">New</span> --}}
+                Setting Website
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
+            <a href="{{ url('/') }}/administrator/banner" class="nav-link">
+              <i class="nav-icon fas fa-caret-right"></i>
               <p>
-                Perilaku Gizi
-                {{-- <span class="right badge badge-danger">New</span> --}}
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url('/') }}/quiz_pengetahuan" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pengetahuan</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/') }}/quiz_praktek_gizi" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dengan gaya hidup</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url('/') }}/quiz_makanan" class="nav-link">
-              <i class="nav-icon fas fa-utensils"></i>
-              <p>
-                Paparan junk food 
-                {{-- <span class="right badge badge-danger">New</span> --}}
+                Banner
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/') }}/belajar" class="nav-link">
-              <i class="nav-icon fas fa-book-open"></i>
+            <a href="{{ url('/') }}/administrator/user" class="nav-link">
+              <i class="nav-icon fas fa-caret-right"></i>
               <p>
-                Edukasi
-                {{-- <span class="right badge badge-danger">New</span> --}}
-              </p>
-            </a>
-          </li>
-          {{-- <li class="nav-item">
-            <a href="{{ url('/') }}/quiz_submition" class="nav-link">
-              <i class="nav-icon fas fa-star-half-alt"></i>
-              <p>
-                Quiz submission
-              </p>
-            </a>
-          </li> --}}
-          <li class="nav-item">
-            <a href="{{ url('/') }}/simpang_baku" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                TB Simpang Baku
-                {{-- <span class="right badge badge-danger">New</span> --}}
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url('/') }}/user" class="nav-link">
-              <i class="nav-icon fas fa-user-lock"></i>
-              <p>
-                Management User
-                {{-- <span class="right badge badge-danger">New</span> --}}
+                Management user
               </p>
             </a>
           </li>
@@ -233,7 +169,6 @@
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
                 Logout
-                {{-- <span class="right badge badge-danger">New</span> --}}
               </p>
             </a>
           </li>

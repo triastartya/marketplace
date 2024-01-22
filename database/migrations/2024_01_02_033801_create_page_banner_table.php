@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('page_banner', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid');
-            $table->string('gambar');
-            $table->string('slug');
-            $table->string('judul');
-            $table->string('detail');
+            $table->string('uuid',100);
+            $table->string('gambar',50);
+            $table->string('slug',100);
+            $table->string('judul',50);
+            $table->text('detail');
+            $table->boolean('aktif');
             $table->timestamps();
         });
     }

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('page', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid');
-            $table->string('nama');
-            $table->string('logo');
+            $table->string('uuid',100);
+            $table->string('nama',20);
+            $table->string('logo',50);
             $table->text('tentang');
             $table->timestamps();
         });

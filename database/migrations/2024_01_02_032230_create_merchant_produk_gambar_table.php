@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('merchant_produk_gambar', function (Blueprint $table) {
             $table->id('merchant_produk_gambar_id');
-            $table->string('merchant_produk_id');
-            $table->string('path');
+            $table->integer('merchant_produk_id');
+            $table->string('path',50);
             $table->timestamps();
         });
     }

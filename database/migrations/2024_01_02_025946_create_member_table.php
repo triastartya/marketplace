@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email',30);
             $table->string('no_hp',30);
             $table->string('nama',50);
+            $table->string('password',50);
             $table->timestamps();
         });
     }

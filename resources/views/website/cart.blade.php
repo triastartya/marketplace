@@ -21,29 +21,29 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="align-middle"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                <tr ng-repeat="item in keranjang_belanja">
+                  <td class="align-middle"><input ng-model="item.checked" ng-change="sum()" class="form-check-input" type="checkbox"></td>
                   <td class="tg-0lax">
                     <div class="d-flex flex-row pointer">
                       <div>
-                        <img style="height:60px" src="https://via.placeholder.com/800x400" alt="Product Image 1">
+                        <img style="height:60px" src="<% item.merchant_produk.merchant_produk_gambar[0].src %>" alt="Product Image 1">
                       </div>
                       <div>
-                        <p class="ms-2 mb-1">Laptop Murah Hp 15 Intel Celeron N4120 8GB SSD 256GB Backlight FingerPrint Window 11 Original</p>
-                        <p class="ms-2 fs-nama-toko"><i class="fa-solid fa-shop text-primary"></i> berkah bismillah sdfdf sdfsdf dsf</p>
+                        <p class="ms-2 mb-1"><% item.merchant_produk.nama_produk %></p>
+                        <p class="ms-2 fs-nama-toko"><i class="fa-solid fa-shop text-primary"></i> <% item.merchant_produk.merchant.nama_toko %> </p>
                       </div>
                     </div>
                   </td>
-                  <td class="align-middle text-center">Rp 15.000</td>
+                  <td class="align-middle text-center">Rp <% item.merchant_produk.harga_jual | currency:"" %></td>
                   <td class="align-middle">
                     <div class="input-group mb-3 input-group-sm" style="width:120px">
-                      <button class="btn btn-outline-secondary" type="button" id="button-addon1">-</button>
-                      <input value="1" type="number" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">+</button>
+                      <button ng-click="kurang($index,item)" class="btn btn-outline-secondary" type="button" id="button-addon1">-</button>
+                      <input value="<% item.qty %>" type="number" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                      <button ng-click="tambah($index,item)" class="btn btn-outline-secondary" type="button" id="button-addon2">+</button>
                     </div>
                   </td>
-                  <td class="align-middle text-center">Rp 15.000</td>
-                  <td class="align-middle text-center"><a class="text-danger pointer">Hapus</a></td>
+                  <td class="align-middle text-center">Rp <% item.merchant_produk.harga_jual * item.qty | currency:"" %></td>
+                  <td class="align-middle text-center"><a ng-click="hapus(item)" class="text-danger pointer">Hapus</a></td>
                 </tr>
               </tbody>
             </table>
@@ -53,8 +53,8 @@
     <div class="shadow-lg p-3 px-4 mb-2 sticky-bottom" style="background-color: #e3e8fa">
       <div class="d-flex flex-row-reverse">
         <button class="btn btn-primary mx-2 " data-bs-toggle="modal" data-bs-target="#bayar">Checkout</button>
-        <p class="mx-2 my-auto fw-bold fs-4">Rp 15.000</p>
-        <p class="mx-2 my-auto text-primary">Total(1 produk)</p>
+        <p class="mx-2 my-auto fw-bold fs-4">Rp <% total | currency:"" %></p>
+        <p class="mx-2 my-auto text-primary">Total(<% jml | currency:"" %> item)</p>
       </div>
     </div>
     
@@ -64,12 +64,12 @@
         <div class="modal-content">
         <form id="forminput">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Bayar</h1>
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Cara Bayar</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>#INV-73528</p>
-            <h3 class="fw-bold m-3">Rp 15.000</h3>
+            {{-- <p>#INV-73528</p> --}}
+            <h3 class="fw-bold m-3">Rp <% total | currency:"" %></h3>
             <div class="shadow card p-2">
               <div class="row">
                 <div class="col-lg-4"><p>Atas Nama </p></div><div class="col-lg-7"><p class="fw-bold">Badu Raharjo</p></div>
@@ -80,9 +80,7 @@
             <p class="mt-3">Silahkan Transfer ke rekening di atas dan upload bukti transfer</p>
           </div>
           <div class="modal-footer">
-            <a href="{{ url('member') }}">
-              <button type="button" class="btn btn-primary">Buat Invoice</button>
-            </a>
+              <button ng-click="bayar()" type="button" class="btn btn-primary">Buat Invoice</button>
           </div>
         </form>
         </div>
@@ -93,7 +91,64 @@
 @section('ctrl')
     <script>
     app.controller("myCtrl", function($scope,$http) {
+      
+      $scope.total = 0;
+      $scope.jml = 0;
+      
+      $scope.keranjang_belanja = [];
+      
+      Swal.fire({title: 'Loading..',onOpen: () => {Swal.showLoading()}})
+      $http.get("{{ url('data_keranjang_belanja') }}").then(function(res){
+          $scope.keranjang_belanja = res.data.data;
+          Swal.close();
+      });
+      
+      $scope.kurang = function(index,item){
+          if($scope.keranjang_belanja[index].qty >= 2){
+            $scope.keranjang_belanja[index].qty = $scope.keranjang_belanja[index].qty - 1;
+          }
+          $scope.sum();
+      }
+      
+      $scope.tambah = function(index,item){
+        $scope.keranjang_belanja[index].qty = $scope.keranjang_belanja[index].qty + 1;
+        $scope.sum();
+      }
+      
+      $scope.items = [];
+      
+      $scope.sum = function(){
+         var c =  $scope.keranjang_belanja.filter(function(e){
+           return e.checked
+         });
+         
+         $scope.jml = c.sum('qty');
+         
+         $scope.total = c.sum('qty') * c.sum('harga');
+      }
+            
+      
+      $scope.bayar = function(){
+        var c =  $scope.keranjang_belanja.filter(function(e){
+            return e.checked
+        });
         
+        Swal.fire({title: 'Loading..',onOpen: () => {Swal.showLoading()}})
+        $http.post("{{ url('buat_invoice') }}",{
+          total : $scope.total,
+          jml : $scope.jml,
+          detail : c
+        }).then(function(res){
+          if(res.data.status){
+              Swal.fire({icon: 'success',title: res.data.message,text: '',}).then(function(){
+                window.location.href = "{{ url('member') }}";
+              })
+          }else{
+              Swal.fire({icon: 'error',title: 'Oops...',text: res.data.message,})
+          }
+        });
+      }
+      
     });
     </script>
 @endsection

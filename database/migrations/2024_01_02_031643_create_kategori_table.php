@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('kategori', function (Blueprint $table) {
             $table->id('kategori_id');
-            $table->string('uuid');
-            $table->string('image');
-            $table->string('kategori');
+            $table->string('uuid',100);
+            $table->string('image',50);
+            $table->string('kategori',50);
+            $table->boolean('aktif')->defalut(true);
             $table->timestamps();
         });
     }

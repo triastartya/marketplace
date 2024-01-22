@@ -9,7 +9,7 @@ class PageController extends Controller
 {
     //
     public function get(){
-        $data = PageModel::where('page_id',1)->first();
+        $data = PageModel::where('id',1)->first();
         return view('administrator.page',$data);
     }
     

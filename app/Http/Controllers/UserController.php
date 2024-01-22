@@ -23,19 +23,16 @@ class UserController extends Controller
     public function login(Request $request)
     {
         try {
-            $checkUsername = User::where('email', $request->email)->first();
+            $checkUsername = User::where('email', $request->username)->first();
             if ($checkUsername) {
-                $checkPassword = User::where('email', $request->email)
-                    ->where('password', md5($request->password))
-                    ->first();
-                if ($checkPassword) {
-                    $request->session()->put('user_admin', $checkPassword);
+                if(md5($request->password)==$checkUsername->password){
+                    $request->session()->put('data_user', $checkUsername);
                     return Response()->json([
                         'status' => true,
                         'message' => null,
-                        'data' => $checkPassword,
+                        'data' => $checkUsername,
                     ]);
-                } else {
+                }else{
                     return Response()->json([
                         'status' => false,
                         'message' => 'Password Salah',

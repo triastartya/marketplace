@@ -14,18 +14,19 @@ return new class extends Migration
         Schema::create('merchant', function (Blueprint $table) {
             $table->id('merchant_id');
             $table->string('uuid');
-            $table->string('email');
-            $table->string('no_hp');
-            $table->string('nama_toko');
-            $table->string('alamat');
-            $table->string('provinsi');
-            $table->string('kota');
-            $table->string('kelurahan');
-            $table->string('kode_pos');
-            $table->string('logo');
-            $table->string('banner');
-            $table->string('keterangan');
-            $table->string('rating');
+            $table->string('email',20);
+            $table->string('password',50);
+            $table->string('no_hp',30);
+            $table->string('nama_toko',20);
+            $table->string('alamat',100);
+            $table->string('provinsi',20);
+            $table->string('kota',20);
+            $table->string('kelurahan',20);
+            $table->string('kode_pos',10);
+            $table->string('logo',30);
+            $table->string('banner',30);
+            $table->string('keterangan',100);
+            $table->double('rating');
             $table->timestamps();
         });
     }
