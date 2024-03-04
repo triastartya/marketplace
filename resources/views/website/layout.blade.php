@@ -19,7 +19,6 @@
     <!-- jquery-validation -->
     <script src="{{ url('/') }}/template/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="{{ url('/') }}/template/plugins/jquery-validation/additional-methods.min.js"></script>
- 
     
     <script src="{{ url('/') }}/template/angularJS/angular.min.js"></script>
     <script src="{{ url('/') }}/template/angularJS/app.js"></script>
@@ -29,6 +28,13 @@
       }
     </style>
     <script>
+    
+    $.get("{{ url('get_page') }}", function(data, status){
+      console.log(data.data)
+      $('#layout_logo').attr("src", data.data.logourl);
+      document.title = data.data.nama;
+    });
+  
       Array.prototype.sum = function (prop) {
             var total = 0
             for ( var i = 0, _len = this.length; i < _len; i++ ) {
@@ -45,7 +51,7 @@
       <div class="d-flex flex-row justify-content-between">
           <div style="width:150px" >
             <a href="{{ url('') }}">
-              <img style="height:38px" alt="tokopedia-logo" src="{{ url('/') }}/images/logo.jpeg">
+              <img style="height:38px" alt="tokopedia-logo" id="layout_logo" src="{{ url('/') }}/images/logo.jpeg">
             </a>
           </div>
           
@@ -54,7 +60,7 @@
               <span class="input-group-text" id="basic-addon1">
                 <i class="fa-solid fa-search mx-1"></i>
               </span>
-              <input type="text" class="form-control" placeholder="Cari Barang">
+              <input id="cari_barang" type="text" class="form-control" placeholder="Cari Barang">
             </div>
           </div>
           
@@ -83,7 +89,7 @@
       <div class="row m-4">
         <div class="col">
           <p class="fw-bold">Alamat</p>
-          <p style="font-size:13px">Jl. Imam Bonjol No.207, Pendrikan Kidul, Kec. Semarang Tengah, Kota Semarang, Jawa Tengah 50131</p>
+          <p style="font-size:13px">Jl.Raya Rembang-Sumber KM 10 Desa Dresikulon Kec. Kaliori Kab. Rembang</p>
         </div>
         <div class="col">
           <p class="fw-bold">Cara Pemesanan</p>
@@ -187,6 +193,11 @@
     </div>
     
     <script>
+    $("#cari_barang").keyup(function(event) {
+        if (event.keyCode === 13) {
+            window.location.href = "{{ url('produk') }}?search="+$("#cari_barang").val();
+        }
+    });
       var validator = $("#form_login_member").validate({
         rules: {
             email: {

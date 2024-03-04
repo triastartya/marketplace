@@ -58,6 +58,7 @@
               <div class="tab-pane fade show active  p-3" id="nav-profil" role="tabpanel" aria-labelledby="nav-profil-tab" tabindex="0">
                 <div class="row">
                   <div class="col-lg-6">
+                  <form id="form_edit_merchant">
                     <h4>Informasi Toko</h4>
                     <div class="mb-2 row">
                         <label for="nama_toko" class="col-sm-3 col-form-label">Nama Toko</label>
@@ -83,16 +84,17 @@
                             <textarea class="form-control" id="alamat" name="alamat" rows="3">{{ $merchant->alamat }}</textarea>
                         </div>
                     </div>
-                    <button class="btn btn-outline-primary me-3">save</button>
-                    <button class="btn btn-outline-primary">ubah password</button>
+                    <button type="submit" class="btn btn-outline-primary me-3">save</button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ubah-password">ubah password</button>
                     <hr/>
+                  </form>
                   </div>
                   <div class="col-lg-6">
                     <h4>Produk <button ng-click="tambah_produk()" class="btn btn-outline-primary btn-sm ms-2">Tambah Produk</button></h4>
                     <div class="row">
                       <div ng-repeat="x in produk" ng-click="detail()" class="col-lg-4">
                         <div class="card my-1 pointer" >
-                          <img src="<% x.merchant_produk_gambar[0].src %>" class="card-img-top" alt="...">
+                          <img src="<% x.merchant_produk_gambar[0].src %>" class="card-img-top" alt="image" style="height: 6rem; width: 100%; object-fit: cover; object-position: center">
                           <div class="card-body p-2">
                             <p class="fs-nama-produk"><% x.nama_produk %></p>
                             <p class="fs-harga-produk">Rp <% x.harga_jual | currency:"" %></p>
@@ -320,6 +322,31 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    
+    <!-- Modal ubah password -->
+    <div class="modal fade" id="ubah-password" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <form id="form_ubah_password">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Password Baru</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-2 row">
+                <label for="no_hp" class="col-sm-3 col-form-label">password</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control form-control-sm" id="password" name="password">
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="submit"  class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
 @endsection 
 
 @section('ctrl')
@@ -403,6 +430,129 @@ app.controller("myCtrl", function($scope,$http) {
       $scope.selected = data;
       $scope.$apply();
     }
-});
+    
+    var validator = $("#form_edit_merchant").validate({
+      rules: {
+        nama_toko: {
+            required: !0,
+        },
+        no_hp: {
+            required: !0,
+        },
+        email: {
+            required: !0,
+        },
+        alamat: {
+            required: !0,
+        },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          error.addClass('fst-italic');
+          element.closest('.form-group .col-sm-9').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+      },
+      invalidHandler: function(e, r){
+
+      },
+      submitHandler: function(e){
+
+        form = $("#form_edit_merchant")[0];
+			    formData = new FormData(form);
+			    
+        $.ajax({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+				url: "{{ url('edit_merchant') }}",
+				type: "POST",
+        data: formData,
+				mimeType: "multipart/form-data",
+				contentType: false,
+				cache: false,
+				processData: false,
+				dataType: "JSON",
+				success: function(data)
+            {
+              if(data.status){
+                Swal.fire({icon: 'success',title: 'Data Berhasil Di Simpan',text: '',}).then(function(){
+                  window.location.reload();
+                })
+              }else{
+                Swal.fire({icon: 'error',title: 'Oops...',text: data.message,})
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+              Swal.fire({icon: 'error',title: 'Oops...',text: 'Something went wrong! please contact IT system',})
+            },
+            beforeSend: function(){
+              Swal.fire({title: 'Loading..',onOpen: () => {Swal.showLoading()}})
+            }
+  			});
+        return false;
+      }
+    });
+    
+    var validator = $("#form_ubah_password").validate({
+      rules: {
+          password: {
+              required: !0,
+          },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          error.addClass('fst-italic');
+          element.closest('.mb-3 .col-sm-9').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+      },
+      invalidHandler: function(e, r){
+  
+      },
+      submitHandler: function(e){
+  			    
+          $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+  					url: "{{ url('ubah_password_merchant') }}",
+  					type: "POST",
+            data:$("#form_ubah_password").serialize(),
+  					dataType: "JSON",
+  					success: function(data)
+              {
+                  if(data.status){
+                      Swal.fire({icon: 'success',title: 'Masuk Ke Halaman Member',text: '',}).then(function(){
+                        window.location.href = "{{ url('member') }}";
+                      })
+                  }else{
+                      Swal.fire({icon: 'error',title: 'Oops...',text: data.message,})
+                  }
+              },
+              error: function (jqXHR, textStatus, errorThrown)
+              {
+                  Swal.fire({icon: 'error',title: 'Oops...',text: 'Something went wrong! please contact IT system',})
+              },
+              beforeSend: function(){
+                  Swal.fire({title: 'Loading..',onOpen: () => {Swal.showLoading()}})
+              }
+  				});
+          return false;
+      }
+    });
+    
+  });
 </script>
 @endsection

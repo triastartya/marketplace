@@ -59,7 +59,7 @@ class MerchantController extends Controller
     public function toko(Request $request){
         if ($request->session()->has('data_merchant')) {
             $data = [
-                'merchant' => $request->session()->get('data_merchant'),
+                'merchant' => MerchantModel::where('merchant_id',$request->session()->get('data_merchant')->merchant_id)->first(),
             ];
             return view('website/toko',$data);
         }else{
@@ -103,7 +103,7 @@ class MerchantController extends Controller
             $request->request->add(['harga_jual'=>$request->harga]);
             $data = MerchantProdukModel::create($request->all());
             $gambar = MerchantProdukGambarModel::create([
-                'merchant_produk_id' => $data->id,
+                'merchant_produk_id' => $data->merchant_produk_id,
                 'path' => $upload_image_name
             ]);
             return response()->json(['status'=>true,'data'=>$data]);
@@ -212,5 +212,29 @@ class MerchantController extends Controller
     public function logout(Request $request){
         $request->session()->forget('data_merchant');
         return redirect('/');
+    }
+    
+    public function edit(Request $request){
+        try{
+        
+            $data=MerchantModel::where('merchant_id',$request->session()->get('data_merchant')->merchant_id)
+            ->update($request->all());
+            return response()->json(['status'=>true,'data'=>$data]);
+        }catch(\Exception $ex){
+            return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
+        }
+    } 
+    
+    public function ubah_password(Request $request){
+        try{
+            $data=MerchantModel::where('merchant_id',$request->session()->get('data_merchant')->merchant_id)
+            ->update([
+                'password' => md5($request->password)
+            ]);
+            
+            return response()->json(['status'=>true,'data'=>$data]);
+        }catch(\Exception $ex){
+            return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
+        }
     }
 }

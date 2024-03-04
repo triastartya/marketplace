@@ -28,11 +28,7 @@ Route::get('/administrator/login',function(){
 
 Route::get('/detail/{uuid}',[LeandingPageController::class,'detail']);
 
-Route::get('/produk',function(){
-    return view('website/list_produk');
-});
-
-
+Route::get('/produk',[LeandingPageController::class,'list_produk']);
 
 Route::get('/register-toko',function(){
     return view('website/daftar_toko');
@@ -59,6 +55,8 @@ Route::get('/administrator/kategori', function () {
     return view('administrator.kategori');
 });
 Route::get('/administrator/page',[PageController::class,'get']);
+
+Route::get('get_page',[PageController::class,'page']);
 
 Route::get('/administrator/banner', function () {
     return view('administrator.banner.listing');
@@ -114,3 +112,9 @@ Route::get('history_pembayaran',[AdministratorController::class,'history_pembaya
 
 Route::get('logout_member',[MemberController::class,'logout']);
 Route::get('logout_merchant',[MerchantController::class,'logout']);
+
+Route::post('edit_profil',[MemberController::class,'edit']);
+Route::post('ubah_password_member',[MemberController::class,'ubah_password']);
+
+Route::post('edit_merchant',[MerchantController::class,'edit']);
+Route::post('ubah_password_merchant',[MerchantController::class,'ubah_password']);

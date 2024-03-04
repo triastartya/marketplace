@@ -90,7 +90,7 @@
                         <select class="form-select" aria-label="Default select example" id="kategori_id" name="kategori_id">
                             <option value=""> </option>
                             @foreach($kategori as $item)
-                                <option value="{{$item->kategori_id}}" @if($produk->kategori_id==$item->kategori_id) selected @endif>{{ $item->kategori }}</option>
+                                <option value="{{$item->kategori_id}}" @isset($produk) @if($produk->kategori_id==$item->kategori_id) selected @endif @endisset>{{ $item->kategori }}</option>
                             @endforeach
                         </select>
                   </div>

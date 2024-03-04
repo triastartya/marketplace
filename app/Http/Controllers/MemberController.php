@@ -16,13 +16,16 @@ class MemberController extends Controller
     //
     public function daftar_member(Request $request){
         try{
-            $request->request->add(['uuid'=>Str::uuid()]);
+            $uuid = Str::uuid();
+            $request->request->add(['uuid'=>$uuid]);
             $insert = $request->all();
             $insert['password'] = md5($insert['password']);
             unset($insert['confirm']);
             $data = MemberModel::create($insert);
-            $request->session()->put('data_member',$insert);
-            return response()->json(['status'=>true,'data'=>$data]);
+            
+            $session = MemberModel::where('uuid',$uuid)->first();
+            $request->session()->put('data_member',$session);
+            return response()->json(['status'=>true,'data'=>$session]);
         }catch(\Exception $ex){
             return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
         }
@@ -48,6 +51,7 @@ class MemberController extends Controller
     }
     
     public function member(Request $request){
+        // dd($request->session()->get('data_member'));
         if ($request->session()->has('data_member')) {
             $data = [
                 'member' => MemberModel::where('member_id',$request->session()->get('data_member')->member_id)->first(),
@@ -60,6 +64,9 @@ class MemberController extends Controller
     
     public function tambah_keranjang_belanja(Request $request){
         try{
+            // if ($request->session()->get('data_member')->member_id==null) {
+            //     return response()->json(['status'=>false,'message'=>"anda belum login", 'data'=>[]]);
+            // }
             $produk = MerchantProdukModel::where('uuid',$request->uuid)->first();
             $edit = KeranjangBelanjaModel::where('merchant_produk_id',$produk->merchant_produk_id)
             ->where('member_id',$request->session()->get('data_member')->member_id)
@@ -193,6 +200,30 @@ class MemberController extends Controller
     public function logout(Request $request){
         $request->session()->forget('data_member');
         return redirect('/');
+    }
+    
+    public function edit(Request $request){
+        try{
+            $data=MemberModel::where('member_id',$request->session()->get('data_member')->member_id)
+            ->update($request->all());
+            
+            return response()->json(['status'=>true,'data'=>$data]);
+        }catch(\Exception $ex){
+            return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
+        }
+    } 
+    
+    public function ubah_password(Request $request){
+        try{
+            $data=MemberModel::where('member_id',$request->session()->get('data_member')->member_id)
+            ->update([
+                'password' => md5($request->password)
+            ]);
+            
+            return response()->json(['status'=>true,'data'=>$data]);
+        }catch(\Exception $ex){
+            return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
+        }
     }
     
 }

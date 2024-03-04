@@ -13,6 +13,15 @@ class PageController extends Controller
         return view('administrator.page',$data);
     }
     
+    public function page(){
+        try{
+            $data = PageModel::where('id',1)->first();
+            return response()->json(['status'=>true,'data'=>$data]);
+        }catch(\Exception $ex){
+            return response()->json(['status'=>false,'message'=>$ex->getMessage(), 'data'=>[]]);
+        }
+    }
+    
     public function update(Request $request){
         try{
             $upload_image_name = '';
@@ -24,7 +33,7 @@ class PageController extends Controller
                 $request->request->add(['image'=>$upload_image_name]);
             }            
             
-            $update = PageModel::where('page_id',1)->update([
+            $update = PageModel::where('id',1)->update([
                 'nama'=>$request->nama,
                 'logo'=>$upload_image_name,
                 'tentang'=>$request->tentang

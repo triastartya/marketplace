@@ -36,7 +36,7 @@
               <div class="card m-2 mt-3">
                   <div class="d-flex flex-row m-2">
                     @foreach($kategoris as $key => $kategori)
-                      <div class="p-2"><a href="javascript:void(0);">{{ $kategori->kategori }}</a></div>
+                      <div class="p-2"><a href="javascript:void(0);" ng-click="kat('{{ $kategori->kategori_id }}')">{{ $kategori->kategori }}</a></div>
                     @endforeach  
                   </div>
               </div>
@@ -47,7 +47,7 @@
           @foreach($produks as $key => $produk)
             <div class="col-lg-2">
               <div ng-click="detail('{{$produk->uuid}}')" class="card my-1 pointer">
-                <img src="{{$produk->merchant_produk_gambar[0]->src}}" class="card-img-top" alt="...">
+                <img src="{{$produk->merchant_produk_gambar[0]->src}}" class="card-img-top" alt="image" style="height: 6rem; width: 100%; object-fit: cover; object-position: center">
                 <div class="card-body p-2">
                   <p class="fs-nama-produk">{{$produk->nama_produk}}</p>
                   <p class="fs-harga-produk">Rp {{ number_format($produk->harga_jual,2,',','.') }}</p>
@@ -96,6 +96,9 @@
         }
         $scope.masuk_toko = function(){
           window.location.href = "{{ url('masuk-toko') }}";
+        }
+        $scope.kat = function(id){
+          window.location.href = "{{ url('produk') }}?kat="+id;
         }
     });
     </script>
