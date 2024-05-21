@@ -22,10 +22,10 @@ return new class extends Migration
             $table->integer('jml');
             $table->integer('status');
             $table->string('status_bayar',20);
-            $table->string('bukti_transfer',30);
-            $table->datetime('tanggal_bukti_transfer');
-            $table->datetime('tgl_verifikasi');
-            $table->integer('user_id_verifikasi');
+            $table->string('bukti_transfer',30)->nullable();
+            $table->datetime('tgl_bukti_transfer')->nullable();
+            $table->datetime('tgl_verifikasi')->nullable();
+            $table->integer('user_id_verifikasi')->nullable();
             $table->timestamps();
         });
     }
